@@ -1,4 +1,5 @@
 using System;
+using LogAssert;
 using Microsoft.Extensions.Logging;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("MineSweeperCli.Test")]
@@ -19,11 +20,23 @@ public class Game
     public Game(ILogger log, Settings settings)
     {
         this.log = log;
-        this.settings = settings;
         log.LogDebug("Created with Settings={@Settings}", settings);
+        ValidateInitialSettingsElseThrow(log, settings);
         PlayerPosition = new Position(settings.StartingColumn, 1);
         LivesLeft = settings.StartingLives;
         BoardSize = settings.BoardSize;
+    }
+
+    static void ValidateInitialSettingsElseThrow(ILogger log, Settings settings)
+    {
+        log.EnsureElseThrow(settings.BoardSize >= 1,
+            () => new ArgumentOutOfRangeException("settings.BoardSize", "must be at least 1"));
+        log.EnsureElseThrow(settings.StartingLives >= 1,
+            () => new ArgumentOutOfRangeException("settings.StartingsLives", "must be at least 1"));
+        log.EnsureElseThrow(settings.StartingColumn >= 1,
+            () => new ArgumentOutOfRangeException("settings.StartingColumn", "must be at least 1"));
+        log.EnsureElseThrow(settings.StartingColumn <= settings.BoardSize,
+            () => new ArgumentOutOfRangeException("settings.StartingColumn", "must be at least no bigger than boardSize"));
     }
 
     public int BoardSize { get; }
@@ -31,5 +44,4 @@ public class Game
     public Position PlayerPosition { get; }
     
     readonly ILogger log;
-    readonly Settings settings;
 }
