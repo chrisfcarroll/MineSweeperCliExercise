@@ -1,17 +1,22 @@
 using System;
 using Microsoft.Extensions.Logging;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("MineSweeperCli.Test")]
+
 namespace MineSweeperCli;
 
 /// <summary>A component which … </summary>
-public class MineSweeperCli
+public class Game
 {
-    public void Do()
+    internal const string StatusLineTemplate = "Current Position: {0} | Lives Left {1}";
+
+    public string GetStatusLine()
     {
-        log.LogDebug("Called on {@OS}", Environment.OSVersion);
+        log.LogTrace(nameof(GetStatusLine));
+        return string.Format(StatusLineTemplate, PlayerPosition, LivesLeft);
     }
 
-    public MineSweeperCli(ILogger log, Settings settings)
+    public Game(ILogger log, Settings settings)
     {
         this.log = log;
         this.settings = settings;
@@ -28,5 +33,3 @@ public class MineSweeperCli
     readonly ILogger log;
     readonly Settings settings;
 }
-
-public record struct Position(int X, int Y);

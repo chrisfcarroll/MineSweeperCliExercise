@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace MineSweeperCli.SelfHosted
 {
     /// <summary>
-    /// A commandline wrapper for <see cref="MineSweeperCli"/> which uses <see cref="Startup"/> to
+    /// A commandline wrapper for <see cref="Game"/> which uses <see cref="Startup"/> to
     /// initialize Configuration, Logging, and Settings. 
     /// </summary>
     public static class Program
@@ -19,10 +19,10 @@ namespace MineSweeperCli.SelfHosted
             
             Startup.Configure();
             
-        new MineSweeperCli(
-                Startup.LoggerFactory.CreateLogger<MineSweeperCli>(),
+        new Game(
+                Startup.LoggerFactory.CreateLogger<Game>(),
                 Startup.Settings
-            ).Do();
+            ).GetStatusLine();
         }
 
         static 
