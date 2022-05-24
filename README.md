@@ -1,9 +1,12 @@
 Developer Coding Test – Minefield Game
 ======================================
 
+- _This branch includes after-hours completion. See tag TwoHourMark for the 2 hour mark code._ 
+
 ### Known Specs. 
 
 [X] = Completed by the two hour mark
+[+] = Completed after two hour mark
 
 - [X] player has lives
 - [X] There is a (by default 8x8) board
@@ -14,8 +17,8 @@ Developer Coding Test – Minefield Game
 - [X] There must be some mines
 - [X] Input can move the player
 - [X] You can't move off the board
-
 - [+] A player loses a life by hitting a minefield
+- [+] Move off top of board = win
 - [+] Final score= number of moves to reach other side
 
 ### Two Hour Mark
