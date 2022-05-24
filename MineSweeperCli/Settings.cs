@@ -2,7 +2,8 @@
 {
     public class Settings
     {
-        public string Setting1 { get; set; } =
-            "I have no settings but if I did, this would be a default value";
+        public int BoardSize { get; set; } = 8;
+        public int StartingLives { get; set; } = 3;
+        public int StartingColumn { get; set; } = 4;
     }
 }
