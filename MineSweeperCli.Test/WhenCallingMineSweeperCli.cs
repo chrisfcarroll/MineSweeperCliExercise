@@ -49,7 +49,7 @@ namespace MineSweeperCli.Test
             line
                 .ShouldBe(
                     string.Format(
-                        Game.StatusLineTemplate, unitUnderTest.PlayerPosition, startLives));
+                        Game.StatusLineTemplate, unitUnderTest.PlayerPosition, startLives, unitUnderTest.PlayerMoveCount));
         }
 
         public WhenCallingMineSweeperCli(ITestOutputHelper outt)

@@ -8,10 +8,11 @@ Developer Coding Test – Minefield Game
 [X] Output:
   [X] player current position eg C2 in chess notation
   [X] players lives left
-  - players moves so far
+  [X] players moves so far
   - A player loses a life by hitting a minefield
   - Final score= number of moves to reach other side
   - Input: up/down/left/right
+[ ] You can't move off the board
     
 # Guessed Specs?
 

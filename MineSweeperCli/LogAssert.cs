@@ -4,6 +4,7 @@ using Microsoft.VisualBasic;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
+// ReSharper disable once CheckNamespace
 namespace LogAssert;
 
 public static class LogAssert
