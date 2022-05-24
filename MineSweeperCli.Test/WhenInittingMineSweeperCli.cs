@@ -84,7 +84,11 @@ namespace MineSweeperCli.Test
             outt.WriteLine(string.Join(",", gameUnderTest.ActiveMines));
             
             //Assert
-            gameUnderTest.ActiveMines.Length.ShouldBe((boardSize * boardSize * mineDensityPercent / 100));
+            gameUnderTest.ActiveMines.Length.ShouldBeGreaterThanOrEqualTo(1);
+            gameUnderTest.ActiveMines.Length.ShouldBeLessThanOrEqualTo((boardSize *
+                                                                        boardSize *
+                                                                        mineDensityPercent /
+                                                                        100));
         }
         
         [Fact]

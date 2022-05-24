@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace MineSweeperCli.SelfHosted
 {
@@ -14,63 +13,35 @@ namespace MineSweeperCli.SelfHosted
     {
         public static void Main(params string[] args)
         {
-            var (someFiles,someKeys) = 
-                    ValidateExampleParametersElseShowHelpTextAndExit(args);
+            ValidateExampleParametersElseShowHelpTextAndExit(args);
             
             Startup.Configure();
             
-        new Game(
-                Startup.LoggerFactory.CreateLogger<Game>(),
-                Startup.Settings
-            ).GetStatusLine();
+            var game= new Game(
+                    args.Length>0 
+                        ? Startup.LoggerFactory.CreateLogger<Game>()
+                        : NullLogger.Instance, 
+                    Startup.Settings
+                );
+            
+            Console.WriteLine(game.GetStatusLine());
+
+            game.EventLoop(() => Console.ReadKey().Key, Console.WriteLine);
         }
 
-        static 
-            (FileInfo[] someFiles, Dictionary<string, string> someKeys) 
-                ValidateExampleParametersElseShowHelpTextAndExit(string[] args)
+        static void ValidateExampleParametersElseShowHelpTextAndExit(string[] args)
         {
-            ShowHelpTextAndExitImmediatelyIf(shouldShowHelpThenExit: args.Length == 0);
-            ShowHelpTextAndExitImmediatelyIf(HelpOptions.Contains(args[0].TrimStart('/').TrimStart('-')));
-            var (someFiles, someKeys) = ParseArgs.GetSomeFileNamesAndKeys(args);
-            ShowHelpTextAndExitImmediatelyIf(someFiles.Length == 0 && someKeys.Count==0);
-            return (someFiles,someKeys);
+            ShowHelpTextAndExitImmediatelyIf(shouldShowHelpThenExit: args.Length > 1);
         }
 
         static readonly string[] HelpOptions = {"?", "h","help"};
 
         const string ConsoleHelpText = @"
-MineSweeperCli parameter1 [ parameter2 ] [ key1=value1 [ key2=value2 ]]]
+MineSweeperCli Chris F Carroll 24 May 2022
 
-    Example help text for commandline usage.
-
-    You might mention that Settings can be read from the appsettings.json file.
-    
-    Example:
-
-    MineSweeperCli simple example of parameters
-
+    Use the Arrow keys to move
+    Try to stay alive
 ";
-        static class ParseArgs
-        {
-            public static ( FileInfo[], Dictionary<string, string>) GetSomeFileNamesAndKeys(params string[] args)
-            {
-                var files = new List<FileInfo>(); 
-                var someKeys=new Dictionary<string,string>();
-                foreach (var arg in args)
-                {
-                    if (arg.Contains("="))
-                    {
-                        var kv= arg.Split(new[]{'='}, 2);
-                        someKeys.Add( kv[0], kv[1]);
-                    }
-                    else
-                    {
-                        files.Add(new FileInfo(arg));
-                    }
-                }
-                return (files.ToArray(), someKeys);
-            }
-        }
 
         /// <summary>
         ///If <paramref name="shouldShowHelpThenExit"/> is not true, then show <see cref="ConsoleHelpText"/> and call
@@ -79,8 +50,8 @@ MineSweeperCli parameter1 [ parameter2 ] [ key1=value1 [ key2=value2 ]]]
         /// <param name="shouldShowHelpThenExit"></param>
         static void ShowHelpTextAndExitImmediatelyIf(bool shouldShowHelpThenExit)
         {
-            if (!shouldShowHelpThenExit) return;
             Console.WriteLine(ConsoleHelpText);
+            if (!shouldShowHelpThenExit) return;
             Environment.Exit(ReturnExitCodeIfParametersInvalid);
         }
 
