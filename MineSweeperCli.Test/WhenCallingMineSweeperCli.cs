@@ -9,8 +9,27 @@ namespace MineSweeperCli.Test
 {
     public class WhenCallingMineSweeperCli
     {
-        readonly ITestOutputHelper outt;
+        [Theory]
+        [InlineData(4)]
+        [InlineData(1)]
+        public void StatusShouldShowPositionInChessboardFormat(int startingColumn)
+        {
+            //Arrange
+            unitUnderTest = new Game(
+                new StringListLogger(log = new List<string>()), 
+                new Settings{BoardSize = 8, StartingColumn = startingColumn});
 
+            var expected = "A"+startingColumn.ToString();
+            
+            //Act
+            var line = unitUnderTest.GetStatusLine();
+            
+            //Debug
+            outt.WriteLine(line);
+            //Assert
+            line.ShouldContain(expected);
+        }
+        
         [Fact]
         public void ShouldReturnStatusLine()
         {
@@ -25,26 +44,18 @@ namespace MineSweeperCli.Test
                     string.Format(
                         Game.StatusLineTemplate, unitUnderTest.PlayerPosition, unitUnderTest.LivesLeft));
         }
-        
-        [Fact]
-        public void ShouldLog()
-        {
-            //Act
-            unitUnderTest.GetStatusLine();
-            
-            //Assert
-            log.ShouldNotBeEmpty().First().ShouldNotBeEmpty();
-        }
 
         public WhenCallingMineSweeperCli(ITestOutputHelper outt)
         {
             this.outt = outt;
             unitUnderTest = new Game(
                 new StringListLogger(log = new List<string>()), 
-                new Settings());
+                settings);
         }
 
-        readonly Game unitUnderTest;
-        readonly List<string> log;
+        Game unitUnderTest;
+        List<string> log;
+        readonly ITestOutputHelper outt;
+        Settings settings = new();
     }
 }

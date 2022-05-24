@@ -19,6 +19,7 @@ namespace MineSweeperCli.Test
         [InlineData(1,0,1)]
         [InlineData(1,1,0)]
         [InlineData(1,1,2)]
+        [InlineData(27,1,1)]
         public void ShouldThrowGivenInvalidBoardSize(int boardSize, int startingLives, int startingColumn)
         {
             //Arrange
@@ -73,7 +74,7 @@ namespace MineSweeperCli.Test
             //Assert
             log.ShouldNotBeEmpty().First().ShouldNotBeEmpty();
         }
-
+        
         public WhenInittingMineSweeperCli(ITestOutputHelper outt)
         {
             this.outt = outt;

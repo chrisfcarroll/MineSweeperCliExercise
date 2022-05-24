@@ -31,6 +31,8 @@ public class Game
     {
         log.EnsureElseThrow(settings.BoardSize >= 1,
             () => new ArgumentOutOfRangeException("settings.BoardSize", "must be at least 1"));
+        log.EnsureElseThrow(settings.BoardSize <= 26,
+            () => new ArgumentOutOfRangeException("settings.BoardSize", "Sorry, maximum board size is currently 26"));
         log.EnsureElseThrow(settings.StartingLives >= 1,
             () => new ArgumentOutOfRangeException("settings.StartingsLives", "must be at least 1"));
         log.EnsureElseThrow(settings.StartingColumn >= 1,
