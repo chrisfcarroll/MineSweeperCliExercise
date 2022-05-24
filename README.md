@@ -12,10 +12,11 @@ Developer Coding Test – Minefield Game
 - [X] players lives left
 - [X] players moves so far
 - [X] There must be some mines
-- [ ] Input can move the player
-- [ ] A player loses a life by hitting a minefield
-- [ ] Final score= number of moves to reach other side
-- [ ] You can't move off the board
+- [X] Input can move the player
+- [X] You can't move off the board
+
+- [+] A player loses a life by hitting a minefield
+- [+] Final score= number of moves to reach other side
 
 ### Two Hour Mark
 

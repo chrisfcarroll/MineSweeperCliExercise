@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using LogAssert;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("MineSweeperCli.Test")]
 
@@ -10,17 +13,25 @@ namespace MineSweeperCli;
 /// <summary>A component which … </summary>
 public class Game
 {
+    internal const string Delim = " | ";
     internal const string StatusLineTemplate = "Current Position: {0} | Lives Left {1} | Moves Made {2}";
+    internal const string Bang = "BANG!";
+    internal const string YouWon = "Congratulations, You Won!";
 
     public string GetStatusLine()
     {
         log.LogTrace(nameof(GetStatusLine));
-        return string.Format(StatusLineTemplate, PlayerPosition, LivesLeft, PlayerMoveCount);
+        var statusLine = string.Format(StatusLineTemplate, PlayerPosition, LivesLeft, PlayerMoveCount);
+        if (IsOnMine()) { statusLine = string.Join(Delim, statusLine, Bang);}
+        if (IsWon()) { statusLine = string.Join(Delim, statusLine, YouWon);}
+        return statusLine;
     }
 
-    public Game(ILogger log, Settings settings, Position? initialPosition=null)
+
+    public Game(ILogger? log=null, Settings? settings=null, Position? initialPosition=null)
     {
-        this.log = log;
+        this.log = log?? NullLogger.Instance;
+        settings ??= new Settings();
         log.LogDebug("Created with Settings={@Settings}", settings);
         settings.SanitiseAndValidateInitialSettingsElseThrow(log);
         if (initialPosition is Position initialPositionV)
@@ -35,7 +46,7 @@ public class Game
         }
         LivesLeft = settings.StartingLives;
         BoardSize = settings.BoardSize;
-        ActiveMines = ActiveMinesInitializer.RandomFromSizeAndDensityBestEffort(settings);
+        ActiveMines = ActiveMinesInitializer.RandomFromSizeAndDensityBestEffort(settings,PlayerPosition);
     }
 
 
@@ -54,7 +65,7 @@ public class Game
 
     /// <summary>Is created during construction, with mine density taken from <see cref="Settings.MineDensityPercent"/>
     /// </summary>
-    public Position[] ActiveMines { get;  }
+    public List<Position> ActiveMines { get; internal set; }
 
     readonly ILogger log;
 
@@ -70,7 +81,7 @@ public class Game
                             CancellationToken cancellationToken=default)
     {
         Exception? inputException = null;
-        while (!cancellationToken.IsCancellationRequested && inputException is null)
+        while (!cancellationToken.IsCancellationRequested && inputException is null && !GameOver)
         {
             try
             {
@@ -80,6 +91,7 @@ public class Game
                 var nextOutputLine = string.Join(" | ", $"Moved:{move}", GetStatusLine()); 
                 output( nextOutputLine );
                 log.LogInformation(nextOutputLine);
+                LoseLifeIfDead();
             } 
             catch (Exception e)
             {
@@ -89,6 +101,20 @@ public class Game
         }
         return GetStatusLine();
     }
+
+    void LoseLifeIfDead()
+    {
+        if (IsOnMine())
+        {
+            log.LogInformation("Hit Mine at {PlayerPosition}", PlayerPosition);
+            LivesLeft -= 1;
+        }
+    }
+
+    public bool IsOnMine() => ActiveMines.Contains(PlayerPosition);
+    public bool IsWon() => LivesLeft > 0 && PlayerPosition.Y > BoardSize;
+
+    public bool GameOver => LivesLeft == 0 || PlayerPosition.Y > BoardSize;
 
     void UpdatePositionFrom(ConsoleKey move)
     {
@@ -107,7 +133,7 @@ public class Game
 
     void MoveUpIfPossible()
     {
-        if (PlayerPosition.Y < BoardSize)
+        if (PlayerPosition.Y <= BoardSize)
         {
             PlayerPosition = PlayerPosition.Add(0, 1);
         }   

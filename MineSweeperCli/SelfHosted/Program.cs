@@ -27,6 +27,15 @@ namespace MineSweeperCli.SelfHosted
             Console.WriteLine(game.GetStatusLine());
 
             game.EventLoop(() => Console.ReadKey().Key, Console.WriteLine);
+
+            if (game.IsWon())
+            {
+                Console.WriteLine("Well done! Final Score " + game.PlayerMoveCount);
+            }
+            else
+            {
+                Console.WriteLine("You win some, you lose some!");
+            }
         }
 
         static void ValidateExampleParametersElseShowHelpTextAndExit(string[] args)

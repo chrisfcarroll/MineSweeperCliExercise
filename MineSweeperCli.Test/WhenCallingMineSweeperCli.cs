@@ -47,7 +47,7 @@ namespace MineSweeperCli.Test
             outt.WriteLine(line);
             //Assert
             line
-                .ShouldBe(
+                .ShouldStartWith(
                     string.Format(
                         Game.StatusLineTemplate, unitUnderTest.PlayerPosition, startLives, unitUnderTest.PlayerMoveCount));
         }
