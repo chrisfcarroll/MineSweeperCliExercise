@@ -43,6 +43,8 @@ public class Game
     /// <summary>Is updated as you play</summary>
     public int PlayerMoveCount { get; private set; }
 
+    /// <summary>Is created during construction, with mine density taken from <see cref="Settings.MineDensityPercent"/>
+    /// </summary>
     public Position[] ActiveMines { get;  }
 
     readonly ILogger log;
@@ -64,6 +66,7 @@ public class Game
             try
             {
                 var move = input();
+                UpdatePositionFrom(move);
                 PlayerMoveCount += 1;
                 var nextOutputLine = string.Join(" | ", $"Moved:{move}", GetStatusLine()); 
                 output( nextOutputLine );
@@ -76,5 +79,22 @@ public class Game
             }
         }
         return GetStatusLine();
+    }
+
+    void UpdatePositionFrom(ConsoleKey move)
+    {
+        switch (move)
+        {
+            case ConsoleKey.UpArrow : MoveUpIfPossible();
+                break;
+        }
+    }
+
+    void MoveUpIfPossible()
+    {
+        if (PlayerPosition.Y < BoardSize)
+        {
+            PlayerPosition = PlayerPosition.Add(0, 1);
+        }   
     }
 }

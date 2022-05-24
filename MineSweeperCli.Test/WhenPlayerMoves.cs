@@ -11,7 +11,7 @@ namespace MineSweeperCli.Test
     public class WhenPlayerMoves
     {
         [Fact]
-        public void UpArrowMovePlayerUp()
+        public void UpArrowMovesPlayerUp()
         {
             //Arrange
             var outputs = new List<string>();
@@ -29,8 +29,7 @@ namespace MineSweeperCli.Test
                 outputs.Add);
             
             //Debug
-            outt.WriteLine("Player Output");
-            outputs.ForEach(l => outt.WriteLine(l));
+            outt.WriteLine($"Before {positionBefore} | After {gameUnderTest.PlayerPosition}");
             
             //Assert
             gameUnderTest.PlayerPosition.ShouldBe(
