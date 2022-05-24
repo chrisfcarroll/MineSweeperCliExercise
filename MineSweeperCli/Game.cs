@@ -22,25 +22,13 @@ public class Game
     {
         this.log = log;
         log.LogDebug("Created with Settings={@Settings}", settings);
-        ValidateInitialSettingsElseThrow(log, settings);
+        settings.SanitiseAndValidateInitialSettingsElseThrow(log);
         PlayerPosition = new Position(settings.StartingColumn, 1);
         LivesLeft = settings.StartingLives;
         BoardSize = settings.BoardSize;
+        ActiveMines = ActiveMinesInitializer.RandomFromSizeAndDensityBestEffort(settings);
     }
 
-    static void ValidateInitialSettingsElseThrow(ILogger log, Settings settings)
-    {
-        log.EnsureElseThrow(settings.BoardSize >= 1,
-            () => new ArgumentOutOfRangeException("settings.BoardSize", "must be at least 1"));
-        log.EnsureElseThrow(settings.BoardSize <= 26,
-            () => new ArgumentOutOfRangeException("settings.BoardSize", "Sorry, maximum board size is currently 26"));
-        log.EnsureElseThrow(settings.StartingLives >= 1,
-            () => new ArgumentOutOfRangeException("settings.StartingsLives", "must be at least 1"));
-        log.EnsureElseThrow(settings.StartingColumn >= 1,
-            () => new ArgumentOutOfRangeException("settings.StartingColumn", "must be at least 1"));
-        log.EnsureElseThrow(settings.StartingColumn <= settings.BoardSize,
-            () => new ArgumentOutOfRangeException("settings.StartingColumn", "must be at least no bigger than boardSize"));
-    }
 
     /// <summary>Board Size set by constructor <seealso cref="Settings"/></summary>
     public int BoardSize { get; }
@@ -54,6 +42,8 @@ public class Game
     
     /// <summary>Is updated as you play</summary>
     public int PlayerMoveCount { get; private set; }
+
+    public Position[] ActiveMines { get;  }
 
     readonly ILogger log;
 

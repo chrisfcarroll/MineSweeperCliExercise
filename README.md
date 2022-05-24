@@ -9,6 +9,7 @@ Developer Coding Test – Minefield Game
   [X] player current position eg C2 in chess notation
   [X] players lives left
   [X] players moves so far
+  [X] There must be some mines
   - A player loses a life by hitting a minefield
   - Final score= number of moves to reach other side
   - Input: up/down/left/right

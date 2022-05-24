@@ -60,6 +60,33 @@ namespace MineSweeperCli.Test
             //Assert
             log.ShouldNotBeEmpty().First().ShouldNotBeEmpty();
         }
+
+        [Theory]
+        [InlineData(8, 10)]
+        public void ThereShouldBeMinesPlaced(int boardSize, int mineDensityPercent)
+        {
+            //Arrange
+            var settings = new Settings
+            {
+                BoardSize = boardSize, 
+                MineDensityPercent = mineDensityPercent
+            };
+
+            
+            //Act
+            var gameUnderTest = new Game(
+                new StringListLogger(log = new List<string>()), 
+                settings);
+            
+            //debug
+            gameUnderTest.ActiveMines.ShouldNotBeNull("Active Mines was null");
+            outt.WriteLine($"Boardsize: {boardSize} | MineDensityPercent {mineDensityPercent} ");
+            outt.WriteLine(string.Join(",", gameUnderTest.ActiveMines));
+            
+            //Assert
+            gameUnderTest.ActiveMines.Length.ShouldBe((boardSize * boardSize * mineDensityPercent / 100));
+        }
+        
         [Fact]
         public void ShouldInitAndNotThrowAndShouldLogGivenDefaultSettings()
         {
