@@ -11,6 +11,34 @@ namespace MineSweeperCli.Test
     public class WhenPlayerMoves
     {
         [Fact]
+        public void UpArrowMovePlayerUp()
+        {
+            //Arrange
+            var outputs = new List<string>();
+            var positionBefore = gameUnderTest.PlayerPosition;
+            
+            //Act
+            var hasMoved = false;
+            gameUnderTest.EventLoop( 
+                    ()=>
+                    {
+                        if (hasMoved) throw new Exception();
+                        hasMoved = true;
+                        return ConsoleKey.UpArrow;
+                    }, 
+                outputs.Add);
+            
+            //Debug
+            outt.WriteLine("Player Output");
+            outputs.ForEach(l => outt.WriteLine(l));
+            
+            //Assert
+            gameUnderTest.PlayerPosition.ShouldBe(
+                new Position(positionBefore.X, positionBefore.Y + 1)
+            );
+
+        }
+        [Fact]
         public void StatusShouldShowPlayerMoveCount()
         {
             //Arrange
