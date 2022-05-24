@@ -10,8 +10,11 @@ namespace MineSweeperCli.Test
 {
     public class WhenPlayerMoves
     {
-        [Fact]
-        public void UpArrowMovesPlayerUp()
+        [Theory]
+        [InlineData(ConsoleKey.UpArrow, 0, 1)]
+        [InlineData(ConsoleKey.LeftArrow, -1, 0)]
+        [InlineData(ConsoleKey.RightArrow, 1, 0)]
+        public void UpLeftRightArrowMovesPlayerUpLeftRight(ConsoleKey key, int expectedMoveX, int expectedMoveY)
         {
             //Arrange
             var outputs = new List<string>();
@@ -24,7 +27,7 @@ namespace MineSweeperCli.Test
                     {
                         if (hasMoved) throw new Exception();
                         hasMoved = true;
-                        return ConsoleKey.UpArrow;
+                        return key;
                     }, 
                 outputs.Add);
             
@@ -33,10 +36,10 @@ namespace MineSweeperCli.Test
             
             //Assert
             gameUnderTest.PlayerPosition.ShouldBe(
-                new Position(positionBefore.X, positionBefore.Y + 1)
+                new Position(positionBefore.X + expectedMoveX , positionBefore.Y + expectedMoveY)
             );
-
         }
+        
         [Fact]
         public void StatusShouldShowPlayerMoveCount()
         {

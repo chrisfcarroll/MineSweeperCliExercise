@@ -18,12 +18,21 @@ public class Game
         return string.Format(StatusLineTemplate, PlayerPosition, LivesLeft, PlayerMoveCount);
     }
 
-    public Game(ILogger log, Settings settings)
+    public Game(ILogger log, Settings settings, Position? initialPosition=null)
     {
         this.log = log;
         log.LogDebug("Created with Settings={@Settings}", settings);
         settings.SanitiseAndValidateInitialSettingsElseThrow(log);
-        PlayerPosition = new Position(settings.StartingColumn, 1);
+        if (initialPosition is Position initialPositionV)
+        {
+            log.EnsureElseThrow(initialPositionV.IsInside(1, 1, settings.BoardSize, settings.BoardSize),
+                ()=> new ArgumentOutOfRangeException("initialPosition", "Initial position must be on the board"),initialPosition);
+            PlayerPosition = initialPositionV ;
+        }
+        else
+        {
+            PlayerPosition = new Position(settings.StartingColumn, 1);
+        }
         LivesLeft = settings.StartingLives;
         BoardSize = settings.BoardSize;
         ActiveMines = ActiveMinesInitializer.RandomFromSizeAndDensityBestEffort(settings);
@@ -87,6 +96,12 @@ public class Game
         {
             case ConsoleKey.UpArrow : MoveUpIfPossible();
                 break;
+            case ConsoleKey.LeftArrow : MoveLeftIfPossible();
+                break;
+            case ConsoleKey.RightArrow : MoveRightIfPossible();
+                break;
+            case ConsoleKey.DownArrow : MoveDownIfPossible();
+                break;
         }
     }
 
@@ -95,6 +110,27 @@ public class Game
         if (PlayerPosition.Y < BoardSize)
         {
             PlayerPosition = PlayerPosition.Add(0, 1);
+        }   
+    }
+    void MoveLeftIfPossible()
+    {
+        if (PlayerPosition.X > 1)
+        {
+            PlayerPosition = PlayerPosition.Add(-1, 0);
+        }   
+    }
+    void MoveRightIfPossible()
+    {
+        if (PlayerPosition.X < BoardSize)
+        {
+            PlayerPosition = PlayerPosition.Add(1, 0);
+        }   
+    }
+    void MoveDownIfPossible()
+    {
+        if (PlayerPosition.Y > 1)
+        {
+            PlayerPosition = PlayerPosition.Add(0, -1);
         }   
     }
 }
