@@ -30,9 +30,16 @@ namespace MineSweeperCli.Test
             line.ShouldContain(expected);
         }
         
-        [Fact]
-        public void ShouldReturnStatusLine()
+        [Theory]
+        [InlineData(4)]
+        [InlineData(1)]
+        public void StatusShouldShowLivesLeft(int startLives)
         {
+            //Arrange
+            unitUnderTest = new Game(
+                new StringListLogger(log = new List<string>()), 
+                new Settings{StartingLives = startLives});
+            
             //Act
             var line = unitUnderTest.GetStatusLine();
             
@@ -42,7 +49,7 @@ namespace MineSweeperCli.Test
             line
                 .ShouldBe(
                     string.Format(
-                        Game.StatusLineTemplate, unitUnderTest.PlayerPosition, unitUnderTest.LivesLeft));
+                        Game.StatusLineTemplate, unitUnderTest.PlayerPosition, startLives));
         }
 
         public WhenCallingMineSweeperCli(ITestOutputHelper outt)
