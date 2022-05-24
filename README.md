@@ -1,20 +1,41 @@
 Developer Coding Test – Minefield Game
 ======================================
 
-# Known Specs
+### Known Specs. 
 
-[X] player has lives
-[X] There is a (by default 8x8) board
-[X] Output:
-  [X] player current position eg C2 in chess notation
-  [X] players lives left
-  [X] players moves so far
-  [X] There must be some mines
-  [ ] Input can move the player
+[X] = Completed by the two hour mark
 
-  - A player loses a life by hitting a minefield
-  - Final score= number of moves to reach other side
-[ ] You can't move off the board
+- [X] player has lives
+- [X] There is a (by default 8x8) board
+- [X] Output:
+- [X] player current position eg C2 in chess notation
+- [X] players lives left
+- [X] players moves so far
+- [X] There must be some mines
+- [ ] Input can move the player
+- [ ] A player loses a life by hitting a minefield
+- [ ] Final score= number of moves to reach other side
+- [ ] You can't move off the board
+
+### Two Hour Mark
+
+The 2 hours coding mark is tag TwoHourMark
+
+### History
+
+* ed2b6f7 - (HEAD -> main, tag: TwoHourMark, origin/main) wire up console input and output (2 minutes ago) <Chris F Carroll>
+* 009a0b4 - test 6 WhenInittingMineSweeperCli.ThereShouldBeMinesPlaced (12 minutes ago) <Chris F Carroll>
+* a92cb6c - test 5 - (35 minutes ago) <Chris F Carroll>
+* 8e4eb91 - test 4 - output shows lives left (66 minutes ago) <Chris F Carroll>
+* d2ebb80 - test 3 - output format is chessboard notation (69 minutes ago) <Chris F Carroll>
+* 9681522 - test 2 - validation for settings (77 minutes ago) <Chris F Carroll>
+* 7a5f732 - first functional test - returns a status line current position and lives left (2 hours ago) <Chris F Carroll>
+* 26bea9a - README.md. Specs 1 and 2: a player has lives and there is a board default size 8 (2 hours ago) <Chris F Carroll>
+* 9b77ab1 - add README.md (2 hours ago) <Chris F Carroll>
+* b507179 - Use https://www.nuget.org/packages/Consoleable/ template (2 hours ago) <Chris F Carroll>
+* df95b56 - Start at 21:08 (2 hours ago) <Chris F Carroll>
+
+
     
 # Guessed Specs?
 
