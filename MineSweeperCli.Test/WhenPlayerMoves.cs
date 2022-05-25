@@ -14,36 +14,6 @@ namespace MineSweeperCli.Test
         [InlineData(ConsoleKey.UpArrow, 0, 1)]
         [InlineData(ConsoleKey.LeftArrow, -1, 0)]
         [InlineData(ConsoleKey.RightArrow, 1, 0)]
-        public void UpLeftRightArrowMovesPlayerUpLeftRight(ConsoleKey key, int expectedMoveX, int expectedMoveY)
-        {
-            //Arrange
-            var outputs = new List<string>();
-            var positionBefore = gameUnderTest.PlayerPosition;
-            
-            //Act
-            var hasMoved = false;
-            gameUnderTest.EventLoop( 
-                    ()=>
-                    {
-                        if (hasMoved) throw new Exception();
-                        hasMoved = true;
-                        return key;
-                    }, 
-                outputs.Add);
-            
-            //Debug
-            outt.WriteLine($"Before {positionBefore} | After {gameUnderTest.PlayerPosition}");
-            
-            //Assert
-            gameUnderTest.PlayerPosition.ShouldBe(
-                new Position(positionBefore.X + expectedMoveX , positionBefore.Y + expectedMoveY)
-            );
-        }
-        
-        [Theory]
-        [InlineData(ConsoleKey.UpArrow, 0, 1)]
-        [InlineData(ConsoleKey.LeftArrow, -1, 0)]
-        [InlineData(ConsoleKey.RightArrow, 1, 0)]
         [InlineData(ConsoleKey.DownArrow, 0, -1)]
         public void UpLeftRightDownArrowMovesPlayerUpLeftRight(ConsoleKey key, int expectedMoveX, int expectedMoveY)
         {

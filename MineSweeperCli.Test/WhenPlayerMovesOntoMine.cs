@@ -80,31 +80,7 @@ namespace MineSweeperCli.Test
             gameUnderTest.GameOver.ShouldBeTrue();
             gameUnderTest.IsWon().ShouldBeFalse();
         }
-        
-        [Fact]
-        public void StatusShouldShowPlayerMoveCount()
-        {
-            //Arrange
-            var keysToType = new[] { ConsoleKey.UpArrow, ConsoleKey.DownArrow };
-            using var keysEnumerator = ((IEnumerable<ConsoleKey>)keysToType).GetEnumerator();
-            var outputs = new List<string>();
-            
-            
-            //Act
-            gameUnderTest.EventLoop(
-                () => keysEnumerator.MoveNext() ? keysEnumerator.Current : throw new Exception(),
-                outputs.Add);
-            
-            //Debug
-            outt.WriteLine("LogLines");
-            log.ForEach(l => outt.WriteLine(l));
-            outt.WriteLine("Player Output");
-            outputs.ForEach(l => outt.WriteLine(l));
-            
-            //Assert
-            gameUnderTest.PlayerMoveCount.ShouldBe(keysToType.Length);
 
-        }
 
         public WhenPlayerMovesOntoMine(ITestOutputHelper outt)
         {

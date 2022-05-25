@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace MineSweeperCli.Test
 {
-    public class WhenCallingMineSweeperCli
+    public class WhenReportingMineSweeperCliStatus
     {
         [Theory]
         [InlineData(4)]
@@ -52,7 +52,7 @@ namespace MineSweeperCli.Test
                         Game.StatusLineTemplate, unitUnderTest.PlayerPosition, startLives, unitUnderTest.PlayerMoveCount));
         }
 
-        public WhenCallingMineSweeperCli(ITestOutputHelper outt)
+        public WhenReportingMineSweeperCliStatus(ITestOutputHelper outt)
         {
             this.outt = outt;
             unitUnderTest = new Game(
