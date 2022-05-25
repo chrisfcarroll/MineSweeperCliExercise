@@ -19,12 +19,12 @@ namespace MineSweeperCli.Test
         {
             //Arrange
             var outputs = new List<string>();
-            gameUnderTest = new Game(new StringListLogger(log), initialPosition: new Position(4, 4));
-            var positionBefore = gameUnderTest.PlayerPosition;
+            controller = new GameController(new StringListLogger(log), initialPosition: new Position(4, 4));
+            var positionBefore = controller.Game.PlayerPosition;
             
             //Act
             var hasMoved = false;
-            gameUnderTest.EventLoop( 
+            controller.EventLoop( 
                 ()=>
                 {
                     if (hasMoved) throw new Exception();
@@ -34,16 +34,16 @@ namespace MineSweeperCli.Test
                 outputs.Add);
             
             //Debug
-            outt.WriteLine($"Before {positionBefore} | After {gameUnderTest.PlayerPosition}");
+            outt.WriteLine($"Before {positionBefore} | After {controller.Game.PlayerPosition}");
             
             //Assert
             var expectedNewPosition = new Position(positionBefore.X + expectedMoveX , positionBefore.Y + expectedMoveY);
-            gameUnderTest.PlayerPosition.ShouldBe(
+            controller.Game.PlayerPosition.ShouldBe(
                 expectedNewPosition
             );
-            if (!gameUnderTest.ActiveMines.Contains(expectedNewPosition))
+            if (!controller.Game.ActiveMines.Contains(expectedNewPosition))
             {
-                gameUnderTest.GetStatusLine().ShouldNotContain(Game.Bang);
+                controller.GetStatusLine().ShouldNotContain(GameController.Bang);
             }
         }
         
@@ -53,12 +53,12 @@ namespace MineSweeperCli.Test
         {
             //Arrange
             var outputs = new List<string>();
-            gameUnderTest = new Game(new StringListLogger(log), initialPosition: new Position(5, 8));
-            var positionBefore = gameUnderTest.PlayerPosition;
+            controller = new GameController(new StringListLogger(log), initialPosition: new Position(5, 8));
+            var positionBefore = controller.Game.PlayerPosition;
             
             //Act
             var hasMoved = false;
-            gameUnderTest.EventLoop( 
+            controller.EventLoop( 
                 ()=>
                 {
                     if (hasMoved) throw new Exception();
@@ -68,14 +68,14 @@ namespace MineSweeperCli.Test
                 outputs.Add);
             
             //Debug
-            outt.WriteLine($"Before {positionBefore} | After {gameUnderTest.PlayerPosition}");
+            outt.WriteLine($"Before {positionBefore} | After {controller.Game.PlayerPosition}");
             
             //Assert
             var expectedNewPosition = new Position(positionBefore.X , positionBefore.Y + 1);
-            gameUnderTest.PlayerPosition.ShouldBe(expectedNewPosition);
-            gameUnderTest.IsWon().ShouldBeTrue();
-            gameUnderTest.GetStatusLine().ShouldNotContain(Game.Bang);
-            gameUnderTest.GetStatusLine().ShouldContain(Game.YouWon);
+            controller.Game.PlayerPosition.ShouldBe(expectedNewPosition);
+            controller.Game.IsWon().ShouldBeTrue();
+            controller.GetStatusLine().ShouldNotContain(GameController.Bang);
+            controller.GetStatusLine().ShouldContain(GameController.YouWon);
             
         }        
         [Fact]
@@ -88,7 +88,7 @@ namespace MineSweeperCli.Test
             
             
             //Act
-            gameUnderTest.EventLoop(
+            controller.EventLoop(
                 () => keysEnumerator.MoveNext() ? keysEnumerator.Current : throw new Exception(),
                 outputs.Add);
             
@@ -99,19 +99,19 @@ namespace MineSweeperCli.Test
             outputs.ForEach(l => outt.WriteLine(l));
             
             //Assert
-            gameUnderTest.PlayerMoveCount.ShouldBe(keysToType.Length);
+            controller.Game.PlayerMoveCount.ShouldBe(keysToType.Length);
 
         }
 
         public WhenPlayerMoves(ITestOutputHelper outt)
         {
             this.outt = outt;
-            gameUnderTest = new Game(
+            controller = new GameController(
                 new StringListLogger(log = new List<string>()), 
                 settings);
         }
 
-        Game gameUnderTest;
+        GameController controller;
         List<string> log;
         readonly ITestOutputHelper outt;
         Settings settings = new();

@@ -34,7 +34,7 @@ namespace MineSweeperCli.Test
             outt.WriteLine(settings.ToString());
             //Act
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new Game(new StringListLogger(log = new List<string>()), settings));
+                new GameController(new StringListLogger(log = new List<string>()), settings));
             
         }
         
@@ -52,7 +52,7 @@ namespace MineSweeperCli.Test
 
             
             //Act
-            var unitUnderTest = new Game(
+            var unitUnderTest = new GameController(
                 new StringListLogger(log = new List<string>()), 
                 settings);
             unitUnderTest.GetStatusLine().ShouldNotBeNullOrEmptyOrWhitespace();
@@ -74,28 +74,28 @@ namespace MineSweeperCli.Test
 
             
             //Act
-            var gameUnderTest = new Game(
+            var gameUnderTest = new GameController(
                 new StringListLogger(log = new List<string>()), 
                 settings);
             
             //debug
-            gameUnderTest.ActiveMines.ShouldNotBeNull("Active Mines was null");
+            gameUnderTest.Game.ActiveMines.ShouldNotBeNull("Active Mines was null");
             outt.WriteLine($"Boardsize: {boardSize} | MineDensityPercent {mineDensityPercent} ");
-            outt.WriteLine(string.Join(",", gameUnderTest.ActiveMines));
+            outt.WriteLine(string.Join(",", gameUnderTest.Game.ActiveMines));
             
             //Assert
-            gameUnderTest.ActiveMines.Count.ShouldBeGreaterThanOrEqualTo(1);
-            gameUnderTest.ActiveMines.Count.ShouldBeLessThanOrEqualTo((boardSize *
-                                                                        boardSize *
-                                                                        mineDensityPercent /
-                                                                        100));
+            gameUnderTest.Game.ActiveMines.Count.ShouldBeGreaterThanOrEqualTo(1);
+            gameUnderTest.Game.ActiveMines.Count.ShouldBeLessThanOrEqualTo((boardSize *
+                                                                                              boardSize *
+                                                                                              mineDensityPercent /
+                                                                                              100));
         }
         
         [Fact]
         public void ShouldInitAndNotThrowAndShouldLogGivenDefaultSettings()
         {
             //Arrange
-            var unitUnderTest = new Game(
+            var unitUnderTest = new GameController(
                 new StringListLogger(log = new List<string>()), 
                 new Settings());
             

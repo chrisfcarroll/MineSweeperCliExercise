@@ -19,14 +19,14 @@ namespace MineSweeperCli.Test
         {
             //Arrange
             var outputs = new List<string>();
-            gameUnderTest = new Game(new StringListLogger(log), initialPosition: new Position(4, 4));
-            var positionBefore = gameUnderTest.PlayerPosition;
+            controller = new GameController(new StringListLogger(log), initialPosition: new Position(4, 4));
+            var positionBefore = controller.Game.PlayerPosition;
             var nextPosition = new Position(positionBefore.X + expectedMoveX , positionBefore.Y + expectedMoveY);
-            gameUnderTest.ActiveMines.Add(nextPosition);
+            controller.Game.ActiveMines.Add(nextPosition);
             
             //Act
             var hasMoved = false;
-            gameUnderTest.EventLoop( 
+            controller.EventLoop( 
                 ()=>
                 {
                     if (hasMoved) throw new Exception();
@@ -36,11 +36,11 @@ namespace MineSweeperCli.Test
                 outputs.Add);
             
             //Debug
-            outt.WriteLine($"Before {positionBefore} | After {gameUnderTest.PlayerPosition}");
+            outt.WriteLine($"Before {positionBefore} | After {controller.Game.PlayerPosition}");
             
             //Assert
-            gameUnderTest.PlayerPosition.ShouldBe(nextPosition);
-            gameUnderTest.GetStatusLine().ShouldContain(Game.Bang);
+            controller.Game.PlayerPosition.ShouldBe(nextPosition);
+            controller.GetStatusLine().ShouldContain(GameController.Bang);
         }
         
         [Theory]
@@ -52,17 +52,17 @@ namespace MineSweeperCli.Test
         {
             //Arrange
             var outputs = new List<string>();
-            gameUnderTest = new Game(
+            controller = new GameController(
                 new StringListLogger(log),
                 new Settings{StartingLives = 1},
                 initialPosition: new Position(4, 4));
-            var positionBefore = gameUnderTest.PlayerPosition;
+            var positionBefore = controller.Game.PlayerPosition;
             var nextPosition = new Position(positionBefore.X + expectedMoveX , positionBefore.Y + expectedMoveY);
-            gameUnderTest.ActiveMines.Add(nextPosition);
+            controller.Game.ActiveMines.Add(nextPosition);
             
             //Act
             var hasMoved = false;
-            gameUnderTest.EventLoop( 
+            controller.EventLoop( 
                 ()=>
                 {
                     if (hasMoved) throw new Exception();
@@ -72,25 +72,25 @@ namespace MineSweeperCli.Test
                 outputs.Add);
             
             //Debug
-            outt.WriteLine($"Before {positionBefore} | After {gameUnderTest.PlayerPosition}");
+            outt.WriteLine($"Before {positionBefore} | After {controller.Game.PlayerPosition}");
             
             //Assert
-            gameUnderTest.PlayerPosition.ShouldBe(nextPosition);
-            gameUnderTest.GetStatusLine().ShouldContain(Game.Bang);
-            gameUnderTest.GameOver.ShouldBeTrue();
-            gameUnderTest.IsWon().ShouldBeFalse();
+            controller.Game.PlayerPosition.ShouldBe(nextPosition);
+            controller.GetStatusLine().ShouldContain(GameController.Bang);
+            controller.Game.GameOver.ShouldBeTrue();
+            controller.Game.IsWon().ShouldBeFalse();
         }
 
 
         public WhenPlayerMovesOntoMine(ITestOutputHelper outt)
         {
             this.outt = outt;
-            gameUnderTest = new Game(
+            controller = new GameController(
                 new StringListLogger(log = new List<string>()), 
                 settings);
         }
 
-        Game gameUnderTest;
+        GameController controller;
         List<string> log;
         readonly ITestOutputHelper outt;
         Settings settings = new();

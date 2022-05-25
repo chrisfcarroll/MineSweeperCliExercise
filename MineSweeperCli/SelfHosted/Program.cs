@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 namespace MineSweeperCli.SelfHosted
 {
     /// <summary>
-    /// A commandline wrapper for <see cref="Game"/> which uses <see cref="Startup"/> to
+    /// A commandline wrapper for <see cref="GameController"/> which uses <see cref="Startup"/> to
     /// initialize Configuration, Logging, and Settings. 
     /// </summary>
     public static class Program
@@ -17,24 +17,28 @@ namespace MineSweeperCli.SelfHosted
             
             Startup.Configure();
             
-            var game= new Game(
+            var controller= new GameController(
                     args.Length>0 
-                        ? Startup.LoggerFactory.CreateLogger<Game>()
+                        ? Startup.LoggerFactory.CreateLogger<GameController>()
                         : NullLogger.Instance, 
                     Startup.Settings
                 );
             
-            Console.WriteLine(game.GetStatusLine());
+            Console.WriteLine(controller.GetStatusLine());
 
-            game.EventLoop(() => Console.ReadKey().Key, Console.WriteLine);
+            var outcome= controller.EventLoop(() => Console.ReadKey().Key, Console.WriteLine);
 
-            if (game.IsWon())
+            switch (outcome.Progress)
             {
-                Console.WriteLine("Well done! Final Score " + game.PlayerMoveCount);
-            }
-            else
-            {
-                Console.WriteLine("You win some, you lose some!");
+                case GameProgress.Won: 
+                    Console.WriteLine("Well done! Final Score " + outcome.Score);
+                    break;
+                case GameProgress.Lost: 
+                    Console.WriteLine("You win some, you lose some!");
+                    break;
+                default: 
+                    Console.WriteLine("Don't Stop Now");
+                    break;
             }
         }
 

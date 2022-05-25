@@ -15,7 +15,7 @@ namespace MineSweeperCli.Test
         public void StatusShouldShowPositionInChessboardFormat(int startingColumn)
         {
             //Arrange
-            unitUnderTest = new Game(
+            unitUnderTest = new GameController(
                 new StringListLogger(log = new List<string>()), 
                 new Settings{BoardSize = 8, StartingColumn = startingColumn});
 
@@ -36,7 +36,7 @@ namespace MineSweeperCli.Test
         public void StatusShouldShowLivesLeft(int startLives)
         {
             //Arrange
-            unitUnderTest = new Game(
+            unitUnderTest = new GameController(
                 new StringListLogger(log = new List<string>()), 
                 new Settings{StartingLives = startLives});
             
@@ -49,18 +49,18 @@ namespace MineSweeperCli.Test
             line
                 .ShouldStartWith(
                     string.Format(
-                        Game.StatusLineTemplate, unitUnderTest.PlayerPosition, startLives, unitUnderTest.PlayerMoveCount));
+                        GameController.StatusLineTemplate, unitUnderTest.Game.PlayerPosition, startLives, unitUnderTest.Game.PlayerMoveCount));
         }
 
         public WhenReportingMineSweeperCliStatus(ITestOutputHelper outt)
         {
             this.outt = outt;
-            unitUnderTest = new Game(
+            unitUnderTest = new GameController(
                 new StringListLogger(log = new List<string>()), 
                 settings);
         }
 
-        Game unitUnderTest;
+        GameController unitUnderTest;
         List<string> log;
         readonly ITestOutputHelper outt;
         Settings settings = new();
