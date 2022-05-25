@@ -3,6 +3,25 @@ Developer Coding Test – Minefield Game
 
 - _This branch includes after-hours completion. See tag TwoHourMark for the 2 hour mark code._ 
 
+### Test and Run
+
+```
+echo '
+      Game as finished:
+      '
+      
+git checkout after-2-hours
+dotnet test
+dotnet run --project .\MineSweeperCli\
+#
+echo '
+      Progress up to the two-hour mark :
+      '
+git checkout TwoHourMark
+dotnet test
+dotnet run --project .\MineSweeperCli\
+```
+
 ### Known Specs. 
 
 [X] = Completed by the two hour mark
