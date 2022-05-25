@@ -13,7 +13,7 @@ namespace MineSweeperCli.SelfHosted
     {
         public static void Main(params string[] args)
         {
-            ValidateExampleParametersElseShowHelpTextAndExit(args);
+            Console.WriteLine(ConsoleHelpText);
             
             Startup.Configure();
             
@@ -42,32 +42,15 @@ namespace MineSweeperCli.SelfHosted
             }
         }
 
-        static void ValidateExampleParametersElseShowHelpTextAndExit(string[] args)
-        {
-            ShowHelpTextAndExitImmediatelyIf(shouldShowHelpThenExit: args.Length > 1);
-        }
-
         static readonly string[] HelpOptions = {"?", "h","help"};
 
         const string ConsoleHelpText = @"
-MineSweeperCli Chris F Carroll 24 May 2022
+MineSweeperCli [logs]
+
+    Chris F Carroll 24 May 2022
 
     Use the Arrow keys to move
     Try to stay alive
 ";
-
-        /// <summary>
-        ///If <paramref name="shouldShowHelpThenExit"/> is not true, then show <see cref="ConsoleHelpText"/> and call
-        /// <see cref="Environment.Exit"/> with <c>ExitCode</c>==<see cref="ReturnExitCodeIfParametersInvalid"/>  
-        /// </summary>
-        /// <param name="shouldShowHelpThenExit"></param>
-        static void ShowHelpTextAndExitImmediatelyIf(bool shouldShowHelpThenExit)
-        {
-            Console.WriteLine(ConsoleHelpText);
-            if (!shouldShowHelpThenExit) return;
-            Environment.Exit(ReturnExitCodeIfParametersInvalid);
-        }
-
-        const int ReturnExitCodeIfParametersInvalid = 1;
     }
 }
