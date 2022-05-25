@@ -10,7 +10,7 @@ echo '
       Game as finished:
       '
       
-git checkout after-2-hours
+git checkout main
 dotnet test
 dotnet run --project ./MineSweeperCli
 #
