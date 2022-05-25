@@ -12,14 +12,15 @@ echo '
       
 git checkout after-2-hours
 dotnet test
-dotnet run --project .\MineSweeperCli\
+dotnet run --project ./MineSweeperCli
 #
 echo '
       Progress up to the two-hour mark :
       '
 git checkout TwoHourMark
 dotnet test
-dotnet run --project .\MineSweeperCli\
+dotnet run --project ./MineSweeperCli
+#
 ```
 
 ### Known Specs. 
