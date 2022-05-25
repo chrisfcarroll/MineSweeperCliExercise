@@ -63,8 +63,8 @@ public class GameController
     {
         log.LogTrace(nameof(GetStatusLine));
         var statusLine = string.Format(StatusLineTemplate, Game.PlayerPosition, Game.LivesLeft, Game.PlayerMoveCount);
-        if (Game.IsOnMine()) { statusLine = string.Join(Delim, statusLine, Bang);}
-        if (Game.IsWon()) { statusLine = string.Join(Delim, statusLine, YouWon);}
+        if (Game.IsOnMine) { statusLine = string.Join(Delim, statusLine, Bang);}
+        if (Game.IsWon) { statusLine = string.Join(Delim, statusLine, YouWon);}
         return statusLine;
     }
 

@@ -78,7 +78,7 @@ namespace MineSweeperCli.Test
             controller.Game.PlayerPosition.ShouldBe(nextPosition);
             controller.GetStatusLine().ShouldContain(GameController.Bang);
             controller.Game.GameOver.ShouldBeTrue();
-            controller.Game.IsWon().ShouldBeFalse();
+            controller.Game.IsWon.ShouldBeFalse();
         }
 
 

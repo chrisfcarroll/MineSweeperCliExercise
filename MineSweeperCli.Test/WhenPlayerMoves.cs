@@ -73,7 +73,7 @@ namespace MineSweeperCli.Test
             //Assert
             var expectedNewPosition = new Position(positionBefore.X , positionBefore.Y + 1);
             controller.Game.PlayerPosition.ShouldBe(expectedNewPosition);
-            controller.Game.IsWon().ShouldBeTrue();
+            controller.Game.IsWon.ShouldBeTrue();
             controller.GetStatusLine().ShouldNotContain(GameController.Bang);
             controller.GetStatusLine().ShouldContain(GameController.YouWon);
             

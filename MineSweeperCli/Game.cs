@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace MineSweeperCli;
 
+/// <summary>A Minesweeper Game
+/// How to play: Move with MoveXXX actions and read status from IsXXX status properties
+/// </summary>
 public class Game
 {
     public void MoveUpIfPossible()
@@ -30,6 +33,22 @@ public class Game
         UpdateMoveCountCheckIfDead();
     }
     
+    /// <summary>Ouch! Lose a life.</summary>
+    public bool IsOnMine => ActiveMines.Contains(PlayerPosition);
+    
+    /// <summary>Win by reaching the top of the board</summary>
+    public bool IsWon => LivesLeft > 0 && PlayerPosition.Y > BoardSize;
+    
+    /// <summary> True if all lives are lost or if you made it to the top of the board </summary>
+    public bool GameOver => LivesLeft == 0 || PlayerPosition.Y > BoardSize;
+
+    public GameProgress Progress
+        => IsWon 
+            ? GameProgress.Won 
+            : LivesLeft == 0 
+                ? GameProgress.Lost 
+                : GameProgress.InProgress;
+    
     /// <summary>Board Size set by constructor <seealso cref="Settings"/></summary>
     public int BoardSize { get; }
     
@@ -49,21 +68,9 @@ public class Game
 
     void UpdateMoveCountCheckIfDead()
     {
-        if (IsOnMine()) { LivesLeft -= 1; }
+        if (IsOnMine) { LivesLeft -= 1; }
         PlayerMoveCount++;
     }
-
-    public bool IsOnMine() => ActiveMines.Contains(PlayerPosition);
-    public bool IsWon() => LivesLeft > 0 && PlayerPosition.Y > BoardSize;
-
-    public bool GameOver => LivesLeft == 0 || PlayerPosition.Y > BoardSize;
-
-    public GameProgress Progress
-        => IsWon() 
-            ? GameProgress.Won 
-            : LivesLeft == 0 
-                ? GameProgress.Lost 
-                : GameProgress.InProgress;
     
     public Game(Settings settings, List<Position> activeMines, Position initialPosition)
     {
